@@ -22,7 +22,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeEntity> getAll() {
-        return repository.findAll();
+    public List<Employee> getAll() {
+        List<Employee> employeeList = new ArrayList<>();
+
+        List<EmployeeEntity> employeeEntityList = repository.findAll();
+        employeeEntityList.forEach(employeeEntity -> {
+            Employee employee = new ObjectMapper().convertValue(employeeEntity, Employee.class);
+            employeeList.add(employee);
+        });
+        return employeeList;
+    }
+
+    @Override
+    public void deleteEmployeeById(Long id) {
+        if (repository.existsById(id)){
+            repository.deleteById(id);
+        }
     }
 }
